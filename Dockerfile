@@ -21,7 +21,23 @@ ADD main.py /python
 ADD ctc.pth /python
 RUN python3 /python/main.py
 
+RUN pip3 install tornado
+RUN apt-get update && apt-get install -y openssh-server net-tools && \
+	echo "MaxAuthTries 20" >> /etc/ssh/sshd_config && echo "ClientAliveInterval 30" >> /etc/ssh/sshd_config && echo "ClientAliveCountMax 3" >> /etc/ssh/sshd_config && echo "TMOUT=0" >> /etc/profile && \
+	useradd -s /bin/bash -m land007 && \
+	echo "land007:1234567" | /usr/sbin/chpasswd && \
+	sed -i "s/^land007:x.*/land007:x:0:1000::\/home\/land007:\/bin\/bash/g" /etc/passwd && \
+	sed -i "s/^#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config
+
+
+ADD updata.py /python
+RUN mkdir /python/files
+
+EXPOSE 8080 22
+#CMD python3 main.py
+CMD /etc/init.d/ssh start ; python3 updata.py
+#CMD /etc/init.d/ssh start ; bash
 
 #docker build -t land007/l4t-captcha-break:latest .
-#docker run -it --rm --privileged --runtime nvidia --name captcha-break land007/l4t-captcha-break:latest
-
+#docker run -it --rm --privileged --runtime nvidia --name captcha-break -p 28080:8080 -p 20022:22 land007/l4t-captcha-break:latest
+#docker exec -it captcha-break bash
