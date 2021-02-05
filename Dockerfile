@@ -38,5 +38,5 @@ CMD /etc/init.d/ssh start ; python3 updata.py
 #CMD /etc/init.d/ssh start ; bash
 
 #docker build -t land007/l4t-captcha-break:latest .
-#docker run -it --rm --privileged --runtime nvidia --name captcha-break -p 28080:8080 -p 20022:22 land007/l4t-captcha-break:latest
-#docker exec -it captcha-break bash
+#docker run -it --rm --privileged --runtime nvidia --name l4t-captcha-break -p 28080:8080 -p 20022:22 land007/l4t-captcha-break:latest
+#docker exec -it l4t-captcha-break bash
