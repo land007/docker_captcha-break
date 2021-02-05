@@ -15,12 +15,6 @@ RUN echo "zh_CN.UTF-8 UTF-8" > /etc/locale.gen && \
     /usr/sbin/update-locale LANG=zh_CN.UTF-8
 ENV LC_ALL zh_CN.UTF-8
 
-RUN mkdir /python
-WORKDIR /python
-ADD main.py /python
-ADD ctc.pth /python
-RUN python3 /python/main.py
-
 RUN pip3 install tornado
 RUN apt-get update && apt-get install -y openssh-server net-tools && \
 	echo "MaxAuthTries 20" >> /etc/ssh/sshd_config && echo "ClientAliveInterval 30" >> /etc/ssh/sshd_config && echo "ClientAliveCountMax 3" >> /etc/ssh/sshd_config && echo "TMOUT=0" >> /etc/profile && \
@@ -29,6 +23,11 @@ RUN apt-get update && apt-get install -y openssh-server net-tools && \
 	sed -i "s/^land007:x.*/land007:x:0:1000::\/home\/land007:\/bin\/bash/g" /etc/passwd && \
 	sed -i "s/^#PermitRootLogin prohibit-password/PermitRootLogin yes/g" /etc/ssh/sshd_config
 
+RUN mkdir /python
+WORKDIR /python
+ADD main.py /python
+ADD ctc.pth /python
+RUN python3 /python/main.py
 
 ADD updata.py /python
 RUN mkdir /python/files

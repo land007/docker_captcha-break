@@ -109,14 +109,24 @@ model = model.cuda()
 model
 
 #解码函数和准确率计算函数
+# def decode(sequence):
+#     a = ''.join([characters[x] for x in sequence])
+#     s = ''.join([x for j, x in enumerate(a[:-1]) if x != characters[0] and x != a[j+1]])
+#     if len(s) == 0:
+#         return ''
+#     if a[-1] != characters[0] and s[-1] != a[-1]:
+#         s += a[-1]
+#     return s
 def decode(sequence):
     a = ''.join([characters[x] for x in sequence])
-    s = ''.join([x for j, x in enumerate(a[:-1]) if x != characters[0] and x != a[j+1]])
-    if len(s) == 0:
-        return ''
-    if a[-1] != characters[0] and s[-1] != a[-1]:
-        s += a[-1]
-    return s
+    s = []
+    last = None
+    for x in a:
+        if x != last:
+            s.append(x)
+            last = x
+    s2 = ''.join([x for x in s if x != characters[0]])
+    return s2
 
 def decode_target(sequence):
     return ''.join([characters[x] for x in sequence]).replace(' ', '')
